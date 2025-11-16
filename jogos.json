@@ -1,0 +1,8 @@
+[
+  { "nome": "The Legend of Zelda: Breath of the Wild", "genero": "aventura", "nota": 10 },
+  { "nome": "Hollow Knight", "genero": "plataforma", "nota": 9 },
+  { "nome": "Stardew Valley", "genero": "rpg", "nota": 9 },
+  { "nome": "Celeste", "genero": "plataforma", "nota": 8 },
+  { "nome": "Age of Empires II", "genero": "estrategia", "nota": 9 },
+  { "nome": "Dark Souls III", "genero": "acao", "nota": 10 }
+]

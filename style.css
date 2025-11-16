@@ -1,0 +1,145 @@
+:root {
+  --bg: #0e0e10;
+  --bg-alt: #1c1c21;
+  --text: #e0e0e5;
+  --accent: #6d5dfc;
+  --muted: #999;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --transition: all 0.3s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* HEADER */
+.site-header {
+  background: var(--bg-alt);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+.brand {
+  font-size: 1.5rem;
+  color: var(--accent);
+  font-weight: bold;
+}
+.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-list a {
+  color: var(--text);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.nav-list a:hover {
+  color: var(--accent);
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #6d5dfc33, #12121a);
+  padding: 5rem 2rem;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.hero p {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--muted);
+}
+.btn {
+  background: var(--bg-alt);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* SEÇÕES */
+.section {
+  padding: 4rem 2rem;
+}
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+input, select {
+  background: var(--bg-alt);
+  border: 1px solid #333;
+  color: var(--text);
+  padding: 0.6rem;
+  border-radius: var(--radius);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+}
+.card {
+  background: var(--bg-alt);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+.card:hover {
+  transform: translateY(-4px);
+  border: 1px solid var(--accent);
+}
+.card.large {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* FOOTER */
+.site-footer {
+  background: var(--bg-alt);
+  text-align: center;
+  padding: 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ANIMAÇÃO */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

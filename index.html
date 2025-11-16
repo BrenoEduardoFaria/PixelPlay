@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🎮 PixelPlay — Enciclopédia de Jogos</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <h1 class="brand">🎮 PixelPlay</h1>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="#inicio">Início</a></li>
+          <li><a href="#enciclopedia">Enciclopédia</a></li>
+          <li><a href="#favoritos">Favoritos</a></li>
+          <li><a href="#descobrir">Descobrir</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+      <div class="container hero-inner">
+        <div>
+          <h2>PixelPlay</h2>
+          <p>Descubra, filtre e salve seus jogos favoritos de forma simples e divertida. Explore o universo dos games com um toque de nostalgia pixelada.</p>
+          <button class="btn primary" onclick="document.getElementById('enciclopedia').scrollIntoView({behavior:'smooth'})">
+            Ver Enciclopédia
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENCICLOPÉDIA -->
+    <section id="enciclopedia" class="section container">
+      <div class="section-head">
+        <h2>Enciclopédia de Jogos</h2>
+        <div class="controls">
+          <input id="search" type="search" placeholder="Pesquisar jogo..." />
+          <select id="filter-category">
+            <option value="all">Todas as categorias</option>
+            <option value="ação">Ação</option>
+            <option value="aventura">Aventura</option>
+            <option value="rpg">RPG</option>
+            <option value="estratégia">Estratégia</option>
+            <option value="simulação">Simulação</option>
+            <option value="simulação">Multiplayer</option>
+          </select>
+        </div>
+      </div>
+      <div id="games-grid" class="grid"></div>
+    </section>
+
+    <!-- FAVORITOS -->
+    <section id="favoritos" class="section container">
+      <h2>Favoritos ❤️</h2>
+      <div id="fav-grid" class="grid"></div>
+      <p class="muted">Seus jogos favoritos são salvos automaticamente no seu navegador.</p>
+    </section>
+
+    <!-- DESCOBRIR -->
+    <section id="descobrir" class="section container">
+      <h2>Descobrir Aleatoriamente</h2>
+      <p>Clique abaixo para descobrir um jogo aleatório!</p>
+      <button id="discover" class="btn large">🎲 Descobrir Jogo</button>
+      <div id="random-card" class="card large"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>PixelPlay © 2025 — Feito por Breno Eduardo Faria.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

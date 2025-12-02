@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Favoritos | PixelPlay</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  
+  <header class="header">
+    <div class="brand">PixelPlay</div>
+    <nav class="nav-links">
+      <a href="index.html">Início</a>
+      <a href="enciclopedia.html">Enciclopédia</a>
+      <a href="favoritos.html">Favoritos</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div style="margin-bottom: 2rem;">
+      <h1>Sua Coleção</h1>
+      <p style="color: var(--muted)">Gerencie seus jogos salvos localmente.</p>
+    </div>
+
+    <div class="controls">
+      <input type="text" id="search" placeholder="Buscar nos favoritos...">
+      <select id="genre">
+        <option value="all">Todos os Gêneros</option>
+        <option value="RPG">RPG</option>
+        <option value="Ação">Ação</option>
+      </select>
+      <select id="sort">
+        <option value="rating">Melhor Avaliados</option>
+      </select>
+    </div>
+
+    <div id="game-grid" class="game-grid"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PixelPlay Advanced System</p>
+  </footer>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 /**
  * PixelPlay Core Logic - Advanced Version
+ * O cérebro que gerencia o estado, filtros, persistência e renderização das 3 páginas.
  */
 
 const APP = {
@@ -25,6 +26,7 @@ const APP = {
 
   router: () => {
     const path = window.location.pathname;
+    // O router decide qual função de renderização usar baseado na URL
     if (path.includes('favoritos.html')) {
       APP.render.favorites();
     } else {
@@ -43,9 +45,9 @@ const APP = {
         if (!response.ok) throw new Error('Falha na conexão');
         APP.state.games = await response.json();
         
-        // --- LINHA DE DEBUG CRÍTICA ---
+        // --- LOG DE DEBUG ---
         console.log(`[PixelPlay Debug] Jogos carregados: ${APP.state.games.length} de 50. Se for baixo, o arquivo JSON está em cache.`);
-        // ------------------------------
+        // --------------------
 
       } catch (err) {
         console.error(err);
@@ -97,7 +99,7 @@ const APP = {
       games.forEach(game => {
         const isFav = APP.state.favorites.includes(game.id);
         const card = document.createElement('div');
-        card.className = 'game-card'; // <--- ESTA LINHA ADICIONA A CLASSE
+        card.className = 'game-card'; // Adiciona a classe CSS
         
         card.innerHTML = `
           <div class="desc-popout">
@@ -155,6 +157,7 @@ const APP = {
       return result;
     },
 
+    // Função Debounce para otimizar a busca
     debounce: (func, wait) => {
       let timeout;
       return function(...args) {
@@ -187,6 +190,7 @@ const APP = {
         }
       });
 
+      // Delegação de Eventos no grid
       grid.addEventListener('click', (e) => {
         if (e.target.classList.contains('fav-btn')) {
           const id = parseInt(e.target.dataset.id);

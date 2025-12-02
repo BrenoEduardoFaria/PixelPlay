@@ -24,7 +24,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  /* Oculta barras de rolagem horizontais, garantindo que o popout não cause overflow */
+  overflow-x: hidden; 
 }
 
 a { text-decoration: none; color: inherit; transition: 0.2s; }
@@ -102,9 +103,12 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .desc-popout {
   position: absolute;
   top: 0;
-  right: 105%; 
-  width: 240px;
   
+  /* Padrão: Aparece à DIREITA do card */
+  left: 105%; 
+  right: auto;
+  
+  width: 240px;
   background: var(--bg-alt);
   border: 1px solid var(--accent);
   padding: 1.2rem;
@@ -113,13 +117,14 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   
   opacity: 0;
   visibility: hidden;
-  transform: translateX(10px) scale(0.98); /* Popout mais sutil */
-  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); /* Transição para transform e opacity */
+  /* Move -10px, vindo da direita */
+  transform: translateX(-10px) scale(0.98); 
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); 
   pointer-events: none;
   
   font-size: 0.9rem;
   color: #d1d1d6;
-  z-index: 101; /* Garante que fique acima de outros cards em hover */
+  z-index: 101; 
 }
 
 .desc-popout h4 {
@@ -128,8 +133,32 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
     font-size: 1rem;
 }
 
-/* Revelar o popout no hover do card pai */
+/* Revelar o popout na DIREITA no hover do card pai (padrão) */
 .game-card:hover .desc-popout {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+}
+
+
+/* --- CORREÇÃO DO FLIP PARA A ESQUERDA (resolve o corte lateral) --- */
+
+/* Seleciona os cartões que estão nas últimas 2 ou 3 posições da linha (mais prováveis de estarem na borda) */
+/* Isso reverte a posição do popout para aparecer na ESQUERDA */
+.game-card:nth-last-child(-n+2):hover .desc-popout,
+.game-card:nth-last-child(-n+3):nth-child(3n+1):hover .desc-popout 
+{
+  /* Altera a posição para aparecer na ESQUERDA */
+  left: auto; 
+  right: 105%; /* Posiciona 5% para fora da borda esquerda */
+  /* Move 10px, vindo da esquerda */
+  transform: translateX(10px) scale(0.98); 
+}
+
+/* NOVO EFEITO: Revelar o popout na ESQUERDA (para os cards laterais) */
+.game-card:nth-last-child(-n+2):hover .desc-popout,
+.game-card:nth-last-child(-n+3):nth-child(3n+1):hover .desc-popout
+{
   opacity: 1;
   visibility: visible;
   transform: translateX(0) scale(1);
@@ -176,8 +205,9 @@ footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border);
         transform: scale(1.02);
         z-index: 10;
     }
+    /* Desativa popout em telas pequenas para evitar cortes */
     .desc-popout { 
-        display: none; /* Desativa popout em telas pequenas para evitar cortes */
+        display: none; 
     }
     .controls { grid-template-columns: 1fr; }
 }

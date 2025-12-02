@@ -10,7 +10,8 @@
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   --shadow-hover: 0 20px 40px rgba(0,0,0,0.7);
   --font-main: 'Inter', system-ui, sans-serif;
-  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Curva de animação aprimorada */
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94); 
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,15 +54,26 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  transition: all 0.3s var(--ease);
+  /* Transição otimizada: Apenas propriedades transform e shadow */
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
   position: relative;
   z-index: 1;
   overflow: visible;
+  
+  /* ESTILOS INICIAIS PARA ANIMAÇÃO JAVASCRIPT */
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+/* CLASSE DE ANIMAÇÃO NO FIM DO CARREGAMENTO */
+.game-card.animate {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* Efeito de Hover no Cartão Principal */
 .game-card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05); /* Escalonamento menor para ser mais sutil */
   box-shadow: var(--shadow-hover);
   border-color: var(--accent);
   z-index: 100; 
@@ -101,13 +113,13 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   
   opacity: 0;
   visibility: hidden;
-  transform: translateX(20px);
-  transition: all 0.3s var(--ease);
+  transform: translateX(10px) scale(0.98); /* Popout mais sutil */
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease); /* Transição para transform e opacity */
   pointer-events: none;
   
   font-size: 0.9rem;
   color: #d1d1d6;
-  z-index: -1;
+  z-index: 101; /* Garante que fique acima de outros cards em hover */
 }
 
 .desc-popout h4 {
@@ -120,7 +132,7 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .game-card:hover .desc-popout {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
 }
 
 
@@ -128,7 +140,34 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .fav-btn { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; background: var(--bg-alt); color: var(--muted); }
 .fav-btn:hover { background: var(--border); color: #fff; border-color: #fff; }
 .fav-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.loading, .error, .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: 1.2rem; }
+.error, .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: 1.2rem; }
+
+
+/* ANIMAÇÃO DE CARREGAMENTO MAIS MODERNA */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
 footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); margin-top: auto; color: var(--muted); }
 
 /* Responsividade */
@@ -137,6 +176,8 @@ footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border);
         transform: scale(1.02);
         z-index: 10;
     }
-    .desc-popout { display: none; }
+    .desc-popout { 
+        display: none; /* Desativa popout em telas pequenas para evitar cortes */
+    }
     .controls { grid-template-columns: 1fr; }
 }

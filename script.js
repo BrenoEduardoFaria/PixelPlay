@@ -38,14 +38,18 @@ const APP = {
       grid.innerHTML = '<div class="loading">Carregando biblioteca neural...</div>';
       
       try {
-        // Delay reduzido para 300ms pois temos muitos dados agora
         await new Promise(r => setTimeout(r, 300)); 
         const response = await fetch('games.json');
         if (!response.ok) throw new Error('Falha na conexão');
         APP.state.games = await response.json();
+        
+        // --- LINHA DE DEBUG CRÍTICA ---
+        console.log(`[PixelPlay Debug] Jogos carregados: ${APP.state.games.length} de 50. Se for baixo, o arquivo JSON está em cache.`);
+        // ------------------------------
+
       } catch (err) {
         console.error(err);
-        grid.innerHTML = '<div class="error">Erro ao carregar dados.</div>';
+        grid.innerHTML = '<div class="error">Erro ao carregar dados. Verifique a URL do JSON ou se está usando Live Server.</div>';
       }
     },
 
@@ -79,7 +83,6 @@ const APP = {
       APP.render.grid(filtered);
     },
 
-    // --- AQUI ESTÁ A MUDANÇA PRINCIPAL NA RENDERIZAÇÃO ---
     grid: (games) => {
       const grid = document.getElementById('game-grid');
       grid.innerHTML = '';
@@ -94,11 +97,8 @@ const APP = {
       games.forEach(game => {
         const isFav = APP.state.favorites.includes(game.id);
         const card = document.createElement('div');
-        card.className = 'game-card';
+        card.className = 'game-card'; // <--- ESTA LINHA ADICIONA A CLASSE
         
-        // A estrutura HTML mudou:
-        // 1. Adicionamos a div .desc-popout no início (o CSS a joga para a esquerda)
-        // 2. Removemos o <p> de descrição de dentro do .card-content
         card.innerHTML = `
           <div class="desc-popout">
              <h4>${game.title}</h4>
@@ -155,7 +155,6 @@ const APP = {
       return result;
     },
 
-    // Debounce ajustado para 250ms para ficar mais ágil com muitos dados
     debounce: (func, wait) => {
       let timeout;
       return function(...args) {
@@ -173,7 +172,6 @@ const APP = {
       const grid = document.getElementById('game-grid');
 
       if (searchInput) {
-        // Usando o debounce para não travar a digitação
         searchInput.addEventListener('input', APP.utils.debounce((e) => {
           APP.state.filters.search = e.target.value;
           APP.router();

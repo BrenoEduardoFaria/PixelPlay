@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "Cyber Odyssey 2077",
+    "genre": "RPG",
+    "rating": 9.2,
+    "year": 2023,
+    "desc": "Um futuro distópico onde a tecnologia encontra a rebelião.",
+    "image": "https://placehold.co/600x400/1a1a2e/e94560?text=Cyber+Odyssey"
+  },
+  {
+    "id": 2,
+    "title": "Aether Chronicles",
+    "genre": "Aventura",
+    "rating": 8.5,
+    "year": 2021,
+    "desc": "Explore ilhas flutuantes em um mundo fragmentado.",
+    "image": "https://placehold.co/600x400/16213e/0f3460?text=Aether"
+  },
+  {
+    "id": 3,
+    "title": "Neon Racer X",
+    "genre": "Corrida",
+    "rating": 7.8,
+    "year": 2024,
+    "desc": "Velocidade extrema em pistas de luz sintética.",
+    "image": "https://placehold.co/600x400/533483/e94560?text=Neon+Racer"
+  },
+  {
+    "id": 4,
+    "title": "Void Slayer",
+    "genre": "Ação",
+    "rating": 9.5,
+    "year": 2022,
+    "desc": "A única coisa que eles temem é você.",
+    "image": "https://placehold.co/600x400/0f3460/e94560?text=Void+Slayer"
+  },
+  {
+    "id": 5,
+    "title": "Starlight Strategy",
+    "genre": "Estratégia",
+    "rating": 8.0,
+    "year": 2020,
+    "desc": "Domine a galáxia, um sistema solar de cada vez.",
+    "image": "https://placehold.co/600x400/1a1a2e/16213e?text=Starlight"
+  },
+  {
+    "id": 6,
+    "title": "Pixel Dungeon",
+    "genre": "Roguelike",
+    "rating": 8.9,
+    "year": 2019,
+    "desc": "Morra, aprenda, repita. Masmorras infinitas.",
+    "image": "https://placehold.co/600x400/533483/1a1a2e?text=Pixel+Dungeon"
+  }
+]

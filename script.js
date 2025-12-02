@@ -18,9 +18,10 @@ const APP = {
     APP.ui.highlightMenu();
     const grid = document.getElementById('game-grid');
     if (grid) {
+      // Garante que os controles sejam ligados antes de renderizar
+      APP.events.bindControls(); 
       await APP.data.fetchGames();
       APP.router();
-      APP.events.bindControls();
     }
   },
 
@@ -78,7 +79,7 @@ const APP = {
       const filtered = APP.utils.processFilters(favGames);
       
       const grid = document.getElementById('game-grid');
-      if (favGames.length === 0) {
+      if (favGames.length === 0 && APP.state.games.length > 0) { // Verifica se jogos foram carregados
         grid.innerHTML = '<div class="empty">Nenhum favorito salvo ainda.</div>';
         return;
       }
@@ -95,11 +96,12 @@ const APP = {
       }
 
       const fragment = document.createDocumentFragment();
+      const gameElements = []; // Array para armazenar os elementos DOM criados
 
       games.forEach(game => {
         const isFav = APP.state.favorites.includes(game.id);
         const card = document.createElement('div');
-        card.className = 'game-card'; // Adiciona a classe CSS
+        card.className = 'game-card'; 
         
         card.innerHTML = `
           <div class="desc-popout">
@@ -124,9 +126,18 @@ const APP = {
           </div>
         `;
         fragment.appendChild(card);
+        gameElements.push(card); // Adiciona o elemento ao array
       });
 
       grid.appendChild(fragment);
+
+      // NOVO: Animação de entrada sequencial (Staggered Fade-in)
+      gameElements.forEach((el, index) => {
+        // Aplica a classe 'animate' com um pequeno atraso para cada card
+        setTimeout(() => {
+          el.classList.add('animate');
+        }, index * 50); // Atraso de 50ms entre cada card
+      });
     }
   },
 
@@ -169,10 +180,12 @@ const APP = {
 
   events: {
     bindControls: () => {
+      // Remove a verificação desnecessária de 'grid', pois os controles
+      // só existem se estivermos em 'enciclopedia.html' ou 'favoritos.html'.
       const searchInput = document.getElementById('search');
       const genreSelect = document.getElementById('genre');
       const sortSelect = document.getElementById('sort');
-      const grid = document.getElementById('game-grid');
+      const grid = document.getElementById('game-grid'); // Adiciona aqui para o delegador de eventos
 
       if (searchInput) {
         searchInput.addEventListener('input', APP.utils.debounce((e) => {
@@ -190,22 +203,31 @@ const APP = {
         }
       });
 
-      // Delegação de Eventos no grid
-      grid.addEventListener('click', (e) => {
-        if (e.target.classList.contains('fav-btn')) {
-          const id = parseInt(e.target.dataset.id);
-          APP.data.toggleFavorite(id);
-        }
-      });
+      // Delegação de Eventos no grid (sempre que o elemento grid existir)
+      if (grid) {
+        grid.addEventListener('click', (e) => {
+          // Usa o closest para garantir que o clique foi no botão ou em um de seus filhos
+          const favBtn = e.target.closest('.fav-btn');
+          if (favBtn) {
+            const id = parseInt(favBtn.dataset.id);
+            APP.data.toggleFavorite(id);
+          }
+        });
+      }
     }
   },
 
   ui: {
     highlightMenu: () => {
       const links = document.querySelectorAll('.nav-links a');
-      const path = window.location.pathname.split('/').pop() || 'index.html';
+      // Obtém o nome do arquivo atual para destacar o menu
+      const path = window.location.pathname.split('/').pop() || 'index.html'; 
       links.forEach(link => {
-        if (link.getAttribute('href') === path) link.classList.add('active');
+        // Remove a classe 'active' de todos primeiro, para garantir
+        link.classList.remove('active');
+        if (link.getAttribute('href').split('/').pop() === path) {
+          link.classList.add('active');
+        }
       });
     }
   }

@@ -1,6 +1,5 @@
 /**
- * PixelPlay Core Logic
- * Arquitetura baseada em Estado Centralizado e Módulos Funcionais
+ * PixelPlay Core Logic - Advanced Version
  */
 
 const APP = {
@@ -14,20 +13,16 @@ const APP = {
     }
   },
 
-  // Inicializador principal
   init: async () => {
     APP.ui.highlightMenu();
-    
-    // Verifica se estamos numa página que precisa de dados
     const grid = document.getElementById('game-grid');
     if (grid) {
       await APP.data.fetchGames();
-      APP.router(); // Decide qual lógica de renderização usar
+      APP.router();
       APP.events.bindControls();
     }
   },
 
-  // Roteamento simples baseado na URL/Página
   router: () => {
     const path = window.location.pathname;
     if (path.includes('favoritos.html')) {
@@ -37,23 +32,20 @@ const APP = {
     }
   },
 
-  // Módulo de Dados
   data: {
     fetchGames: async () => {
       const grid = document.getElementById('game-grid');
       grid.innerHTML = '<div class="loading">Carregando biblioteca neural...</div>';
       
       try {
-        // Simulando delay de rede para realismo
-        await new Promise(r => setTimeout(r, 600)); 
-        
+        // Delay reduzido para 300ms pois temos muitos dados agora
+        await new Promise(r => setTimeout(r, 300)); 
         const response = await fetch('games.json');
         if (!response.ok) throw new Error('Falha na conexão');
-        
         APP.state.games = await response.json();
       } catch (err) {
         console.error(err);
-        grid.innerHTML = '<div class="error">Erro ao carregar dados. Verifique o JSON.</div>';
+        grid.innerHTML = '<div class="error">Erro ao carregar dados.</div>';
       }
     },
 
@@ -64,16 +56,11 @@ const APP = {
       } else {
         APP.state.favorites.splice(index, 1);
       }
-      
-      // Persistência
       localStorage.setItem('pixelPlayFavs', JSON.stringify(APP.state.favorites));
-      
-      // Re-renderizar se necessário
       APP.router();
     }
   },
 
-  // Módulo de Renderização
   render: {
     library: () => {
       const filtered = APP.utils.processFilters(APP.state.games);
@@ -92,12 +79,13 @@ const APP = {
       APP.render.grid(filtered);
     },
 
+    // --- AQUI ESTÁ A MUDANÇA PRINCIPAL NA RENDERIZAÇÃO ---
     grid: (games) => {
       const grid = document.getElementById('game-grid');
       grid.innerHTML = '';
 
       if (games.length === 0) {
-        grid.innerHTML = '<div class="empty">Nenhum jogo encontrado com esses filtros.</div>';
+        grid.innerHTML = '<div class="empty">Nenhum jogo encontrado.</div>';
         return;
       }
 
@@ -107,20 +95,29 @@ const APP = {
         const isFav = APP.state.favorites.includes(game.id);
         const card = document.createElement('div');
         card.className = 'game-card';
+        
+        // A estrutura HTML mudou:
+        // 1. Adicionamos a div .desc-popout no início (o CSS a joga para a esquerda)
+        // 2. Removemos o <p> de descrição de dentro do .card-content
         card.innerHTML = `
+          <div class="desc-popout">
+             <h4>${game.title}</h4>
+             <p>${game.desc}</p>
+          </div>
+
           <img src="${game.image}" alt="${game.title}" class="card-img" loading="lazy">
+          
           <div class="card-content">
             <div class="card-header">
               <div class="card-title">${game.title}</div>
-              <div class="card-rating">${game.rating}</div>
+              <div class="card-rating">${game.rating.toFixed(1)}</div>
             </div>
             <div class="card-meta">
               <span class="tag">${game.genre}</span>
               <span class="tag">${game.year}</span>
             </div>
-            <p style="font-size: 0.9rem; color: #bbb; margin-bottom: 1rem;">${game.desc}</p>
             <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${game.id}">
-              ${isFav ? '★ Salvo nos Favoritos' : '☆ Adicionar aos Favoritos'}
+              ${isFav ? '★ Salvo' : '☆ Favoritar'}
             </button>
           </div>
         `;
@@ -131,14 +128,11 @@ const APP = {
     }
   },
 
-  // Utilitários e Algoritmos
   utils: {
-    // Pipeline de filtragem
     processFilters: (dataSet) => {
       let result = [...dataSet];
       const { search, genre, sort } = APP.state.filters;
 
-      // 1. Busca (Case insensitive)
       if (search) {
         const term = search.toLowerCase();
         result = result.filter(g => 
@@ -147,12 +141,10 @@ const APP = {
         );
       }
 
-      // 2. Filtro de Gênero
       if (genre !== 'all') {
         result = result.filter(g => g.genre === genre);
       }
 
-      // 3. Ordenação
       result.sort((a, b) => {
         if (sort === 'rating') return b.rating - a.rating;
         if (sort === 'year') return b.year - a.year;
@@ -163,21 +155,16 @@ const APP = {
       return result;
     },
 
-    // Função Debounce (Performance na digitação)
+    // Debounce ajustado para 250ms para ficar mais ágil com muitos dados
     debounce: (func, wait) => {
       let timeout;
       return function(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        timeout = setTimeout(() => func(...args), wait);
       };
     }
   },
 
-  // Gerenciamento de Eventos
   events: {
     bindControls: () => {
       const searchInput = document.getElementById('search');
@@ -185,15 +172,14 @@ const APP = {
       const sortSelect = document.getElementById('sort');
       const grid = document.getElementById('game-grid');
 
-      // Busca com Debounce (evita renderizar a cada tecla se digitar rápido)
       if (searchInput) {
+        // Usando o debounce para não travar a digitação
         searchInput.addEventListener('input', APP.utils.debounce((e) => {
           APP.state.filters.search = e.target.value;
           APP.router();
-        }, 300));
+        }, 250));
       }
 
-      // Filtros imediatos
       [genreSelect, sortSelect].forEach(el => {
         if (el) {
           el.addEventListener('change', (e) => {
@@ -203,8 +189,6 @@ const APP = {
         }
       });
 
-      // Delegação de Eventos (Event Delegation) para cliques nos botões
-      // Isso permite que botões criados dinamicamente funcionem sem novos listeners
       grid.addEventListener('click', (e) => {
         if (e.target.classList.contains('fav-btn')) {
           const id = parseInt(e.target.dataset.id);
@@ -225,5 +209,4 @@ const APP = {
   }
 };
 
-// Inicializa quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', APP.init);

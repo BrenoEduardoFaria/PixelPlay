@@ -23,13 +23,13 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden; /* Previne rolagem horizontal indesejada */
+  overflow-x: hidden;
 }
 
 a { text-decoration: none; color: inherit; transition: 0.2s; }
 ul { list-style: none; }
 
-/* Header and Nav - Sem mudanças */
+/* Header and Nav */
 .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
 .brand { font-weight: 800; font-size: 1.5rem; color: var(--accent); letter-spacing: -1px; }
 .nav-links { display: flex; gap: 1.5rem; }
@@ -39,14 +39,13 @@ ul { list-style: none; }
 input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.8rem; border-radius: 8px; font-family: inherit; }
 input:focus, select:focus { outline: 2px solid var(--accent); border-color: transparent; }
 
-/* --- GRID E CARTÕES (A Mágica Acontece Aqui) --- */
 
+/* GRID E CARTÕES */
 .game-grid {
   display: grid;
-  /* Ajustado para cartões um pouco menores para caber mais */
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 2rem; /* Aumentei o gap para dar espaço ao hover */
-  align-items: start; /* Importante para o hover não quebrar o grid */
+  gap: 2rem;
+  align-items: start;
   padding-bottom: 2rem;
 }
 
@@ -55,18 +54,17 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   border: 1px solid var(--border);
   border-radius: 12px;
   transition: all 0.3s var(--ease);
-  position: relative; /*Necessário para o popout absoluto */
-  z-index: 1; /* Z-index base */
-  /* Importante: permitir que o popout saia da caixa */
-  overflow: visible; 
+  position: relative;
+  z-index: 1;
+  overflow: visible;
 }
 
 /* Efeito de Hover no Cartão Principal */
 .game-card:hover {
-  transform: scale(1.1); /* Aumenta 10% */
+  transform: scale(1.1);
   box-shadow: var(--shadow-hover);
   border-color: var(--accent);
-  z-index: 100; /* Traz para frente de tudo */
+  z-index: 100; 
 }
 
 .card-img { 
@@ -78,7 +76,6 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 
 .card-content { 
   padding: 1rem;
-  /* Cor de fundo sólida para cobrir elementos atrás quando escalado */
   background: var(--card); 
   border-radius: 0 0 12px 12px;
 }
@@ -89,14 +86,12 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .card-meta { display: flex; gap: 0.5rem; font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; flex-wrap: wrap;}
 .tag { background: var(--bg-alt); padding: 0.2rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);}
 
-/* --- ÁREA DA DESCRIÇÃO LATERAL (POPOUT) --- */
-
+/* ÁREA DA DESCRIÇÃO LATERAL (POPOUT) */
 .desc-popout {
   position: absolute;
   top: 0;
-  /* Posiciona 105% para a esquerda, saindo do card */
   right: 105%; 
-  width: 240px; /* Largura fixa para a caixa lateral */
+  width: 240px;
   
   background: var(--bg-alt);
   border: 1px solid var(--accent);
@@ -104,19 +99,17 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   border-radius: 12px;
   box-shadow: var(--shadow-hover);
   
-  /* Estados iniciais (escondido) */
   opacity: 0;
   visibility: hidden;
-  transform: translateX(20px); /* Começa um pouco deslocado para a direita */
+  transform: translateX(20px);
   transition: all 0.3s var(--ease);
-  pointer-events: none; /* Não interfere com o mouse */
+  pointer-events: none;
   
   font-size: 0.9rem;
   color: #d1d1d6;
-  z-index: -1; /* Fica atrás do card principal */
+  z-index: -1;
 }
 
-/* Título dentro do popout para contexto */
 .desc-popout h4 {
     color: var(--accent);
     margin-bottom: 0.5rem;
@@ -127,7 +120,7 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .game-card:hover .desc-popout {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0); /* Move para a posição final */
+  transform: translateX(0);
 }
 
 
@@ -138,20 +131,12 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
 .loading, .error, .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: 1.2rem; }
 footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); margin-top: auto; color: var(--muted); }
 
-/* Responsividade para telas menores */
+/* Responsividade */
 @media (max-width: 768px) {
     .game-card:hover {
-        transform: scale(1.02); /* Menos zoom em celulares */
+        transform: scale(1.02);
         z-index: 10;
     }
-    /* Em telas pequenas, o popout lateral não cabe.
-       Vamos escondê-lo e mostrar a descrição dentro do card normalmente. */
     .desc-popout { display: none; }
-    
-    /* Uma classe utilitária que o JS pode usar se quiser mostrar no mobile */
-    .mobile-desc {
-        display: block;
-        font-size: 0.9rem; color: #bbb; margin-bottom: 1rem;
-    }
     .controls { grid-template-columns: 1fr; }
 }
